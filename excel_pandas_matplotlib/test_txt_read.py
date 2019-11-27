@@ -17,7 +17,7 @@ def read_tableMethod(filename):
 
 
 if __name__ == '__main__':
-    data = read_tableMethod('t.txt')
+    data = read_tableMethod('t1.txt')
     print(data)
 
 
