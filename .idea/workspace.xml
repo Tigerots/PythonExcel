@@ -228,6 +228,7 @@
       <workItem from="1574735625103" duration="15436000" />
       <workItem from="1574899268078" duration="17453000" />
       <workItem from="1574930193684" duration="604000" />
+      <workItem from="1574932724393" duration="9000" />
     </task>
     <servers />
   </component>
@@ -263,7 +264,7 @@
     <SUITE FILE_PATH="coverage/PythonExcel$test_xlswriter.coverage" NAME="test_xlswriter Coverage Results" MODIFIED="1574750229551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas _matplotlib" />
     <SUITE FILE_PATH="coverage/PythonExcel$test_txt_read.coverage" NAME="test_txt_read Coverage Results" MODIFIED="1574751028968" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas _matplotlib" />
     <SUITE FILE_PATH="coverage/PythonExcel$matplotlib_test.coverage" NAME="matplotlib_test Coverage Results" MODIFIED="1574906790750" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas_matplotlib" />
-    <SUITE FILE_PATH="coverage/PythonExcel$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1574929697131" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas_matplotlib/main_winform" />
+    <SUITE FILE_PATH="coverage/PythonExcel$main__1_.coverage" NAME="main (1) Coverage Results" MODIFIED="1574932729829" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas_matplotlib/main_winform" />
     <SUITE FILE_PATH="coverage/PythonExcel$readtxt_writexls.coverage" NAME="readtxt_writexls Coverage Results" MODIFIED="1574901703227" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas_matplotlib" />
     <SUITE FILE_PATH="coverage/PythonExcel$path_dirlist_filelist__1_.coverage" NAME="path_dirlist_filelist (1) Coverage Results" MODIFIED="1574752223623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas_matplotlib" />
     <SUITE FILE_PATH="coverage/PythonExcel$read_txt_text.coverage" NAME="read_txt_text Coverage Results" MODIFIED="1574929427276" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/excel_pandas_matplotlib" />
