@@ -5,8 +5,8 @@
 
 
 import xlsxwriter
-import pandas as pd
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 def read_tableMethod(filename):
@@ -57,12 +57,19 @@ if __name__ == '__main__':
     'border': 2  # 单元格边框宽度
     'num_format': '0.00000000' # 小数点位数
     '''
-
+    '''
     fmt = workbook.add_format({"font_name": u"微软雅黑"})
     percent_fmt = workbook.add_format({'num_format': '0.00%'})
     amt_fmt = workbook.add_format({'num_format': '#,##0.00'})
     border_format = workbook.add_format({'border': 1})
-
+    # 日期格式
+    date_fmt = workbook.add_format({'bold': False, 'font_name': u'微软雅黑', 'num_format': 'yyyy-mm-dd'})
+    date_fmt1 = workbook.add_format(
+        {'bold': True, 'font_size': 10, 'font_name': u'微软雅黑', 'num_format': 'yyyy-mm-dd', 'bg_color': '#9FC3D1',
+         'valign': 'vcenter', 'align': 'center'})
+    # 高亮
+    highlight_fmt = workbook.add_format({'bg_color': '#FFD7E2', 'num_format': '0.00%'})
+    '''
     # 标题文本格式
     note_fmt = workbook.add_format({ 'bold': True,
                                      'font_name': u'微软雅黑',
@@ -78,13 +85,7 @@ if __name__ == '__main__':
                                      'num_format': '0.00000000'})
 
 
-    # 日期格式
-    date_fmt = workbook.add_format({'bold': False, 'font_name': u'微软雅黑', 'num_format': 'yyyy-mm-dd'})
-    date_fmt1 = workbook.add_format(
-        {'bold': True, 'font_size': 10, 'font_name': u'微软雅黑', 'num_format': 'yyyy-mm-dd', 'bg_color': '#9FC3D1',
-         'valign': 'vcenter', 'align': 'center'})
-    # 高亮
-    highlight_fmt = workbook.add_format({'bg_color': '#FFD7E2', 'num_format': '0.00%'})
+
 
 
 
@@ -93,10 +94,10 @@ if __name__ == '__main__':
     # df1.to_excel(excel_writer=writer, sheet_name='gpgga_data', columns=[2,4], index=False, header=False)
 
     worksheet1 = writer.sheets['gpgga_data']
-    # # 向excel中写入数据，建立图标时要用到
-    # headings = ['N', 'E']
-    # # 写入表头
-    # worksheet1.write_row('A1', headings)
+    # 向excel中写入数据，建立图标时要用到
+    headings = ['N', 'E']
+    # 写入表头
+    worksheet1.write_row('A1', headings)
 
 
     # 生效单元格格式
@@ -117,27 +118,41 @@ if __name__ == '__main__':
     # # 设置日期格式
     # worksheet1.conditional_format('A3:A62', {'type': 'no_blanks', 'format': date_fmt})
 
+    # 将写入的内容进行保存
+    writer.save()
+
+
     # 此时df是字典呢
-    df = pd.read_excel('t1.xlsx', sheet_name=['gpgga_data'])  # 可以通过表单名同时指定多个
-    data = df.values()  # 获取所有的数据，注意这里不能用head()方法哦~
+    df_sheet = pd.read_excel('t1.xlsx')  # 可以通过表单名同时指定多个
+    print(type(df_sheet))
+    # print(df)
+    print(df_sheet)
+    # print("===", df_sheet["N"]) # 行号
+
+
+    # data1 = df.get_value(1,2)
+    # print(data1)
+    # data = df.values()  # 获取所有的数据，注意这里不能用head()方法哦~
+    # print(type(data))
+
+
+
 
     # 需要将字典转换为DataFrame
-    d = pd.DataFrame(data=data)# 待完成
-    print(d.dtypes)
+    # d = pd.DataFrame()# 待完成
+    # print(d.dtypes)
+
+
+
+
+
 
     x = np.arange(0., 5., 0.2)
     # 红色破折号, 蓝色方块 ，绿色三角块
     plt.plot(x, x, 'r--')
-    plt.show()
+    # plt.show()
 
 
-
-
-
-
-
-    # 将写入的内容进行保存
-    writer.save()
 
 
 

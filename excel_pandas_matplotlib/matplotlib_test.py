@@ -115,7 +115,7 @@ Z = np.sin(R)
 ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap='rainbow')
 # 文件名 紧凑型去白边 像素
 plt.savefig('pic.png',bbox_inches='tight',dpi=300)
-# plt.show()
+plt.show()
 
 
 
