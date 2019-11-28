@@ -8,7 +8,7 @@ import os
 
 
 
-path1 = "..\\excel_pandas_matplotlib\\data"
+path_test = "..\\excel_pandas_matplotlib\\data"
 
 
 def list_path_allfile(path, filetype):
@@ -35,7 +35,7 @@ def read_writeFile(path, f):
             f1.close()
 
 if __name__ == '__main__':
-    list_path_allfile(path1, ".txt")
+    list_path_allfile(path_test, ".txt")
     # read_writeFile(path, f)
     pass
 

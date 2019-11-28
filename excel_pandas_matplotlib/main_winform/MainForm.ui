@@ -26,7 +26,7 @@
     <property name="title">
      <string>消息</string>
     </property>
-    <widget class="QTextEdit" name="textEdit">
+    <widget class="QTextEdit" name="textEdit_msg">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -98,10 +98,10 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QLineEdit" name="lineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_dir"/>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="btn_open_dir">
         <property name="text">
          <string>打开文数据目录</string>
         </property>
@@ -126,7 +126,7 @@
        <rect>
         <x>10</x>
         <y>20</y>
-        <width>73</width>
+        <width>74</width>
         <height>131</height>
        </rect>
       </property>
@@ -214,7 +214,7 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="lineEdit_plt_x">
          <property name="text">
           <string>纬度值</string>
          </property>
@@ -228,7 +228,7 @@
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="lineEdit_plt_y">
          <property name="text">
           <string>经度值</string>
          </property>
@@ -242,7 +242,7 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QLineEdit" name="lineEdit_plt_name">
          <property name="text">
           <string>经纬度数据表</string>
          </property>
@@ -266,19 +266,19 @@
         <x>280</x>
         <y>20</y>
         <width>191</width>
-        <height>74</height>
+        <height>88</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_3">
        <item row="0" column="0">
         <widget class="QLabel" name="label_10">
          <property name="text">
-          <string>保存图片名称</string>
+          <string>图片名称</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_8">
+        <widget class="QLineEdit" name="lineEdit_img_name">
          <property name="text">
           <string>经纬度数据表</string>
          </property>
@@ -287,7 +287,7 @@
        <item row="1" column="0">
         <widget class="QLabel" name="label_11">
          <property name="text">
-          <string>保存图片格式</string>
+          <string>图片格式</string>
          </property>
         </widget>
        </item>
@@ -320,13 +320,13 @@
        </item>
       </layout>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="btn_creat_plt">
       <property name="geometry">
        <rect>
         <x>280</x>
-        <y>100</y>
+        <y>110</y>
         <width>191</width>
-        <height>61</height>
+        <height>51</height>
        </rect>
       </property>
       <property name="text">
@@ -346,7 +346,7 @@
      <property name="title">
       <string>步骤一: 生成Excel文件</string>
      </property>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="btn_creat_excel">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -365,7 +365,7 @@
         <x>10</x>
         <y>20</y>
         <width>251</width>
-        <height>74</height>
+        <height>88</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_2">
@@ -377,7 +377,7 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QLineEdit" name="lineEdit_7">
+        <widget class="QLineEdit" name="lineEdit_excel_name">
          <property name="text">
           <string>经纬度数据表</string>
          </property>
@@ -391,7 +391,7 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QLineEdit" name="lineEdit_5">
+        <widget class="QLineEdit" name="lineEdit_sheet_name">
          <property name="text">
           <string>gpgga_data</string>
          </property>
@@ -425,7 +425,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
