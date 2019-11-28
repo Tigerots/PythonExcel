@@ -127,3 +127,5 @@ dmypy.json
 *.xml
 *.iml
 *.xml
+.idea/PythonExcel.iml
+.idea/workspace.xml
