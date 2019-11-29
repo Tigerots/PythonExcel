@@ -6,7 +6,10 @@
 # 系统模块引用
 import os
 import sys
+import threading
 # pyqt5 相关引用
+import time
+
 from PyQt5 import QtGui
 from PyQt5.QtWidgets import QLabel, QFileDialog
 from PyQt5.QtWidgets import QMainWindow
@@ -105,11 +108,37 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         self.signal_write_msg.connect(self.write_msg_func)
         pass
 
-    def btn_creat_plt_func(self):
+    # 画图线程
+    def thread_plt_func(self):
         msg = ("\r=== 启动生成图表流程 ===")
         self.signal_write_msg.emit(msg)  # 发送日志消息
+        msg = ("正在读取data.txt数据, 请稍后...")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+
+        start = time.perf_counter()
         target_file = os.getcwd() + "\\" + "data.txt"
         df = pd.read_table(target_file, delimiter=",", header=None)
+        elapsed = time.perf_counter() - start
+        msg = ("操作完成, 用时: {}秒".format(elapsed))
+        self.signal_write_msg.emit(msg)
+
+        msg = ("将数据写入到data.csv文件, 该过程时间较长, 请耐心等待...")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+
+        start = time.perf_counter()
+        df.to_csv("data.csv")
+        elapsed = time.perf_counter() - start
+        msg = ("操作完成, 用时: {}秒".format(elapsed))
+        self.signal_write_msg.emit(msg)
+
+        msg = ("将数据写入到data.xlsx文件, 该过程时间较长, 请耐心等待...")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+        start = time.perf_counter()
+        df.to_excel("data.xlsx")
+        elapsed = time.perf_counter() - start
+        msg = ("操作完成, 用时: {}秒".format(elapsed))
+        self.signal_write_msg.emit(msg)
+
         x = df[2]
         y = df[4]
         z = df[7]
@@ -120,8 +149,15 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         plt_plot_table_2(24, z, "red")
         msg = ("正在绘制搜星数点线图, 请稍后...")
         self.signal_write_msg.emit(msg)  # 发送日志消息
-        msg = ("=== 已生成图表并保存,请到文件目录查看 ===")
+        msg = ("已生成图表并保存,请到文件目录查看!")
         self.signal_write_msg.emit(msg)  # 发送日志消息
+
+
+    # 生成图标按键指令
+    def btn_creat_plt_func(self):
+        t = threading.Thread(target=self.thread_plt_func)
+        t.setDaemon(True)# 守护, 主线程结束, 子线程就结束, 不等待
+        t.start()# 启动
         pass
 
     # 读取TXT信息, 转存到Excel中
@@ -153,7 +189,7 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
 
     # 创建Excel文件 按钮操作事件
     def btn_creat_excel_func(self):
-        if len(self.txt_files_name) == 0:
+        if len(self.txt_files_name) == 0: # 如果没有选择文件路径
             self.txt_files_path, self.txt_files_name = self.list_current_path_all_files(".txt")
         self.commit_all_txt_func() # 合并txt文件
         self.translate_to_excel_func() # 转换为Excel
