@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainForm.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.0
+# Created by: PyQt5 UI code generator 5.13.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -140,7 +140,7 @@ class Ui_MainWindow(object):
         self.lineEdit_10.setObjectName("lineEdit_10")
         self.formLayout_3.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.lineEdit_10)
         self.btn_creat_plt = QtWidgets.QPushButton(self.groupBox_3)
-        self.btn_creat_plt.setGeometry(QtCore.QRect(280, 110, 191, 51))
+        self.btn_creat_plt.setGeometry(QtCore.QRect(280, 120, 191, 41))
         self.btn_creat_plt.setObjectName("btn_creat_plt")
         self.groupBox_4 = QtWidgets.QGroupBox(self.groupBox_2)
         self.groupBox_4.setGeometry(QtCore.QRect(10, 60, 271, 171))
@@ -175,7 +175,7 @@ class Ui_MainWindow(object):
         self.formLayout_2.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.lineEdit_6)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 23))
         self.menubar.setObjectName("menubar")
         self.menu = QtWidgets.QMenu(self.menubar)
         self.menu.setObjectName("menu")

@@ -5,7 +5,6 @@
 
 # 系统模块引用
 import os
-import shutil
 import sys
 # pyqt5 相关引用
 from PyQt5 import QtGui
@@ -17,14 +16,40 @@ from excel_pandas_matplotlib.main_winform import MainForm
 from excel_pandas_matplotlib.main_winform import signal_emit
 from excel_pandas_matplotlib.main_winform import stop_threading
 
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import matplotlib as mpl
 # ==========================================================================
 
 
+# 设置图表字体
+mpl.rcParams['font.family'] = 'sans-serif'
+mpl.rcParams['font.sans-serif'] = 'NSimSun,Times New Roman'
+# 用来正常显示中文标签
+plt.rcParams['font.sans-serif'] = ['SimHei']
+plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 
+# X:Y 点线图
+def plt_plot_table(x, y, color):
+    plt.plot(x, y, '.', label='经纬度', color=color)
+    plt.xlabel(u'经度(度)')
+    plt.ylabel(u'纬度(度)')
+    plt.title(u'基站信号稳定性测试数据')
+    plt.legend(loc="best")
+    plt.savefig('信号图.png',bbox_inches='tight',dpi=300) # 保存图片
+    plt.show()
 
-
-
-
+# Y:时间 点线图
+def plt_plot_table_2(x, y, color):
+    x = np.linspace(0, x, len(y))
+    plt.plot(x, y, label='卫星数', color=color)
+    plt.xlabel(u'时间(时)')
+    plt.ylabel(u'卫星数(个)')
+    plt.title(u"基站24小时搜星数据图")
+    plt.legend(loc="best")
+    plt.savefig('搜星图.png', bbox_inches='tight', dpi=300)
+    plt.show()
 # ==========================================================================
 
 
@@ -69,6 +94,7 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         # 按键 btn
         self.btn_open_dir.clicked.connect(self.btn_open_dir_func)
         self.btn_creat_excel.clicked.connect(self.btn_creat_excel_func)
+        self.btn_creat_plt.clicked.connect(self.btn_creat_plt_func)
         # # 列表框 combobox
         # self.cbx_iot_platform.currentTextChanged.connect(self.cbx_iot_platform_changed)
         # # 菜单栏
@@ -79,34 +105,58 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         self.signal_write_msg.connect(self.write_msg_func)
         pass
 
-    # 合并所有TXT文件到一个文件中
-    def commit_all_txt_func(self):
+    def btn_creat_plt_func(self):
+        msg = ("\r=== 启动生成图表流程 ===")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+        target_file = os.getcwd() + "\\" + "data.txt"
+        df = pd.read_table(target_file, delimiter=",", header=None)
+        x = df[2]
+        y = df[4]
+        z = df[7]
+        # 生成折线图并保存
+        plt_plot_table(x, y, "blue")
+        msg = ("正在绘制经纬度点线图, 请稍后...")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+        plt_plot_table_2(24, z, "red")
+        msg = ("正在绘制搜星数点线图, 请稍后...")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+        msg = ("=== 已生成图表并保存,请到文件目录查看 ===")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
         pass
 
-    def btn_creat_excel_func(self):
-        if len(self.txt_files_name) == 0:
-            self.txt_files_path, self.txt_files_name = self.list_current_path_all_files(".txt")
+    # 读取TXT信息, 转存到Excel中
+    def translate_to_excel_func(self):
 
+        pass
+
+    # 合并所有TXT文件到一个文件中
+    def commit_all_txt_func(self):
         msg = ("\r=== 启动生成data.txt文件流程 ===")
         self.signal_write_msg.emit(msg)  # 发送日志消息
-
         # 生成合并文件的目标文件
         target_file = os.getcwd() + "\\" + "data.txt"
         with open(target_file, 'a+') as file_t:
             file_t.seek(0)
-            file_t.truncate()# 清空文件
+            file_t.truncate()  # 清空文件
             msg = ("创建并清空data.txt文件...")
             self.signal_write_msg.emit(msg)  # 发送日志消息
             # 遍历拷贝
-            for i in self.txt_files_name: # 遍历每一个文件
+            for i in self.txt_files_name:  # 遍历每一个文件
                 source_file = self.txt_files_path + "\\" + i[0]
                 msg = ("合并{}文件到data.txt, 请稍后...".format(i[0]))
                 self.signal_write_msg.emit(msg)  # 发送日志消息
                 with open(source_file, 'r') as file_s:
-                    file_t.write(file_s.read() + "\n")
+                    file_t.write(file_s.read())
         msg = ("\r=== 启动生成data.xlsx文件流程 ===")
         self.signal_write_msg.emit(msg)  # 发送日志消息
+        pass
 
+    # 创建Excel文件 按钮操作事件
+    def btn_creat_excel_func(self):
+        if len(self.txt_files_name) == 0:
+            self.txt_files_path, self.txt_files_name = self.list_current_path_all_files(".txt")
+        self.commit_all_txt_func() # 合并txt文件
+        self.translate_to_excel_func() # 转换为Excel
         pass
 
     # 打开数据所在文件夹
@@ -127,7 +177,6 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         # 筛选txt文件s
         msg = ("\r=== 该目录包含如下数据文件: ===")
         self.signal_write_msg.emit(msg)  # 发送日志消息
-
         for file_name in dirs:
             if os.path.splitext(file_name)[1] == filetype:
                 msg = file_name
@@ -137,7 +186,6 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
             msg = ("没有找到数据文件(.txt格式), 请确认...")
             self.signal_write_msg.emit(msg)  # 发送日志消息
         return filedir, all_txt_flies  # 返回文件名
-
 
     # 列出指定文件夹内所有指定类型文件
     def list_path_all_files(self, path, filetype):

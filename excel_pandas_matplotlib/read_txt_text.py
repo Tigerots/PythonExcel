@@ -89,7 +89,7 @@ z = data[2]
 # print(z)
 # 生成图表
 plt_plot_table(x,y,"blue")
-elapsed = (time.perf_counter() - elapsed)
+elapsed = (time.perf_counter() - start)
 print("plt Time used:",elapsed)
 
 
