@@ -18,6 +18,8 @@ from PyQt5.QtWidgets import QLabel, QFileDialog
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QApplication
 # 自定义模块引用
+from matplotlib.ticker import FuncFormatter
+
 import MainForm
 import signal_emit
 import stop_threading
@@ -30,6 +32,9 @@ import matplotlib as mpl
 # ==========================================================================
 
 
+
+
+# 以下为生成图标函数定义 =====================================================
 # 设置图表字体
 mpl.rcParams['font.family'] = 'sans-serif'
 mpl.rcParams['font.sans-serif'] = 'NSimSun,Times New Roman'
@@ -37,15 +42,24 @@ mpl.rcParams['font.sans-serif'] = 'NSimSun,Times New Roman'
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 
+# 坐标轴显示格式
+def formatnum_x(x, pos):
+    return '$%.8f$' % (x)
+
 # X:Y 点线图
 def plt_plot_table(x, y, color):
+    plt.gca().yaxis.set_major_formatter(FuncFormatter(formatnum_x))
+    plt.gca().xaxis.set_major_formatter(FuncFormatter(formatnum_x))
+
     plt.plot(x, y, '.', label='经纬度', color=color)
     plt.xlabel(u'纬度(度)')
     plt.ylabel(u'经度(度)')
     plt.title(u'基站信号稳定性测试数据')
     plt.legend(loc="best")
+    plt.gcf().autofmt_xdate() # 自动旋转X轴标记
     plt.savefig('信号图.png',bbox_inches='tight',dpi=300) # 保存图片
-    plt.show()
+    plt.show() # 如果不显示, 数据会重叠
+    plt.close()
 
 # Y:时间 点线图
 def plt_plot_table_2(x, y, color):
@@ -57,13 +71,14 @@ def plt_plot_table_2(x, y, color):
     plt.legend(loc="best")
     plt.savefig('搜星图.png', bbox_inches='tight', dpi=300)
     plt.show()
+    plt.close()
 # ==========================================================================
 
 
 
 
 
-
+# 以下为窗口应用 ============================================================
 # 主窗口类
 class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
     def __init__(self):
@@ -159,7 +174,7 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
                                         'font_color': 'black',
                                         'align': 'center',
                                         'valign': 'vcenter',
-                                        'num_format': '0.00000000'})
+                                        'num_format': '0.0000000000'})
         C_fmt = workbook.add_format({'bold': False,
                                      'font_name': u'微软雅黑',
                                      'align': 'center',
