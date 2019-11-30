@@ -311,12 +311,6 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
 
 
 
-
-
-
-
-
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     MainWin = MainLogic()
