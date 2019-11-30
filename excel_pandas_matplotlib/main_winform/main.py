@@ -40,8 +40,8 @@ plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 # X:Y 点线图
 def plt_plot_table(x, y, color):
     plt.plot(x, y, '.', label='经纬度', color=color)
-    plt.xlabel(u'经度(度)')
-    plt.ylabel(u'纬度(度)')
+    plt.xlabel(u'纬度(度)')
+    plt.ylabel(u'经度(度)')
     plt.title(u'基站信号稳定性测试数据')
     plt.legend(loc="best")
     plt.savefig('信号图.png',bbox_inches='tight',dpi=300) # 保存图片
@@ -126,11 +126,17 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         msg = ("操作完成, 用时: {}秒".format(elapsed))
         self.signal_write_msg.emit(msg)
 
+        # 清除没用的列
+        df.drop(df.columns[8:15], axis=1, inplace=True)
+        df.drop(df.columns[[0, 1, 3, 5, 6]], axis=1, inplace=True)
+        # 处理经纬度数据,(将度分转换为度)
+        df[2] = (df[2]//100) + (df[2]%100)/60
+        df[4] = (df[4]//100) + (df[4]%100)/60
+
         msg = ("将数据写入到data.csv文件, 该过程时间较长, 请耐心等待...")
         self.signal_write_msg.emit(msg)  # 发送日志消息
-
         start = time.perf_counter()
-        df.to_csv("data.csv")
+        df.to_csv("data.csv", float_format='%.10f')
         elapsed = time.perf_counter() - start
         msg = ("操作完成, 用时: {}秒".format(elapsed))
         self.signal_write_msg.emit(msg)
@@ -138,10 +144,43 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         msg = ("将数据写入到data.xlsx文件, 该过程时间较长, 请耐心等待...")
         self.signal_write_msg.emit(msg)  # 发送日志消息
         start = time.perf_counter()
-        df.to_excel("data.xlsx")
+        # 使用writer写Excel
+        writer = pd.ExcelWriter("data.xlsx")
+        workbook = writer.book
+        # 标题文本格式
+        note_fmt = workbook.add_format({'bold': True,
+                                        'font_name': u'微软雅黑',
+                                        'font_color': 'blue',
+                                        'align': 'center',
+                                        'valign': 'vcenter'})
+        # 文本格式
+        text_fmt = workbook.add_format({'bold': False,
+                                        'font_name': u'微软雅黑',
+                                        'font_color': 'black',
+                                        'align': 'center',
+                                        'valign': 'vcenter',
+                                        'num_format': '0.00000000'})
+        C_fmt = workbook.add_format({'bold': False,
+                                     'font_name': u'微软雅黑',
+                                     'align': 'center',
+                                     'valign': 'vcenter'})
+
+        df.to_excel(excel_writer=writer, sheet_name='gpgga_data', columns=[2, 4, 7], index=False, header=True)
+        worksheet1 = writer.sheets['gpgga_data']
+        # 向excel中写入数据，建立图标时要用到
+        headings = ['纬度值', '经度值', '卫星数']
+        # 写入表头
+        worksheet1.write_row('A1', headings, note_fmt)
+        # 设置列宽
+        worksheet1.set_column('A:B', 30, text_fmt)
+        worksheet1.set_column('C:C', 10, C_fmt)
+        # 将写入的内容进行保存
+        writer.save()
+
         elapsed = time.perf_counter() - start
         msg = ("操作完成, 用时: {}秒".format(elapsed))
         self.signal_write_msg.emit(msg)
+
 
         x = df[2]
         y = df[4]
