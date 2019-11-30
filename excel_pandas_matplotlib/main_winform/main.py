@@ -6,6 +6,9 @@
 # 系统模块引用
 import os
 import sys
+# sys.path.append('/excel_pandas_matplotlib/main_winform')
+
+
 import threading
 # pyqt5 相关引用
 import time
@@ -15,10 +18,11 @@ from PyQt5.QtWidgets import QLabel, QFileDialog
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QApplication
 # 自定义模块引用
-from excel_pandas_matplotlib.main_winform import MainForm
-from excel_pandas_matplotlib.main_winform import signal_emit
-from excel_pandas_matplotlib.main_winform import stop_threading
+import MainForm
+import signal_emit
+import stop_threading
 
+import openpyxl
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -206,7 +210,8 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
 
     # 列出当前目录data文件夹下的txt文件名称
     def list_current_path_all_files(self, filetype):
-        # 列出目录下所有文件
+        # 列出目录下所有文件,
+        # TODO 如果当前目录没有data文件夹或data目录下没有数据文件, 待处理
         filedir = os.getcwd() + '\\data'  # 如果未选择文件,从当前目录查找
         dirs = os.listdir(filedir)
         all_txt_flies = []
