@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'MainForm.ui'
 #
-# Created by: PyQt5 UI code generator 5.13.1
+# Created by: PyQt5 UI code generator 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -196,7 +196,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "基站稳定性测试"))
         self.groupBox.setTitle(_translate("MainWindow", "消息"))
         self.groupBox_5.setTitle(_translate("MainWindow", "操作说明"))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p>1. 用串口助手采集GPS模块返回的GPGGA数据,默认以文本格式保存,可以分包保存</p><p>2. 选择数据文件所在文件夹,软件会自动对文件进行合并</p><p>3. 生成Excel文件,该文件为原始数据</p><p>4. 生成图表,默认使用散点图</p><p>5. 由于数据量大,执行过程较慢,请耐心等待</p></body></html>"))
+        self.label.setText(_translate("MainWindow", "<html><head/><body><p>1. 用串口助手采集GPS模块返回的GPGGA数据,默认以文本格式保存,可以分包保存</p><p>2. 选择数据文件所在文件夹,软件会自动对文件进行合并</p><p>3. 生成的data.txt文件,该文件为原始数据,未经过处理</p><p>4. 生成的data.csv和data.xlsx文件为处理过的文件,将度分格式转为度格式</p><p>5. 生成图表,默认使用散点图,由于数据量大,执行过程较慢,请耐心等待</p></body></html>"))
         self.groupBox_2.setTitle(_translate("MainWindow", "工具栏"))
         self.btn_open_dir.setText(_translate("MainWindow", "打开文数据目录"))
         self.groupBox_3.setTitle(_translate("MainWindow", "步骤二: 生成图表"))

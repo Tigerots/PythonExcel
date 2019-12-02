@@ -58,7 +58,7 @@ def plt_plot_table(x, y, color):
     plt.legend(loc="best")
     plt.gcf().autofmt_xdate() # 自动旋转X轴标记
     plt.savefig('信号图.png',bbox_inches='tight',dpi=300) # 保存图片
-    plt.show() # 如果不显示, 数据会重叠
+    # plt.show() # 如果不显示, 数据会重叠
     plt.close()
 
 # Y:时间 点线图
@@ -70,7 +70,7 @@ def plt_plot_table_2(x, y, color):
     plt.title(u"基站24小时搜星数据图")
     plt.legend(loc="best")
     plt.savefig('搜星图.png', bbox_inches='tight', dpi=300)
-    plt.show()
+    # plt.show()
     plt.close()
 # ==========================================================================
 
@@ -87,7 +87,7 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         self.setupUi(self)
         self.txt_files_path = [] # 数据文件路径
         self.txt_files_name = [] # 数据文件名称列表
-
+        self.df = pd.DataFrame()
         # 禁止最大化, 禁止拉伸
         # self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint)
         self.setFixedSize(self.width(), self.height())
@@ -129,29 +129,60 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
 
     # 画图线程
     def thread_plt_func(self):
-        msg = ("\r=== 启动生成图表流程 ===")
+        msg = ("=== 启动生成图表流程 ===")
         self.signal_write_msg.emit(msg)  # 发送日志消息
-        msg = ("正在读取data.txt数据, 请稍后...")
+        x = self.df[2]
+        y = self.df[4]
+        z = self.df[7]
+        # 生成折线图并保存
+        plt_plot_table(x, y, "blue")
+        msg = ("正在绘制经纬度点线图, 请稍后...")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+
+        plt_plot_table_2(24, z, "red")
+        msg = ("正在绘制搜星数点线图, 请稍后...")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+        msg = ("已生成图表并保存,请到文件目录查看!\r")
+        self.signal_write_msg.emit(msg)  # 发送日志消息
+
+        # try:
+        #     stop_threading.stop_thread(self.t_creat_plt)
+        # except Exception:
+        #     pass
+
+
+    # 生成图标按键指令
+    def btn_creat_plt_func(self):
+        ''' TODO 使用多线程, 关闭后会报错, 为什么'''
+        # self.t_creat_plt = threading.Thread(target=self.thread_plt_func)
+        # self.t_creat_plt.setDaemon(True)# 守护, 主线程结束, 子线程就结束, 不等待
+        # self.t_creat_plt.start()# 启动
+        self.thread_plt_func()
+        pass
+
+    # 读取TXT信息, 转存到Excel中
+    def translate_to_excel_func(self):
+        msg = ("\r正在读取data.txt数据, 请稍后...")
         self.signal_write_msg.emit(msg)  # 发送日志消息
 
         start = time.perf_counter()
         target_file = os.getcwd() + "\\" + "data.txt"
-        df = pd.read_table(target_file, delimiter=",", header=None)
+        self.df = pd.read_table(target_file, delimiter=",", header=None)
         elapsed = time.perf_counter() - start
         msg = ("操作完成, 用时: {}秒".format(elapsed))
         self.signal_write_msg.emit(msg)
 
         # 清除没用的列
-        df.drop(df.columns[8:15], axis=1, inplace=True)
-        df.drop(df.columns[[0, 1, 3, 5, 6]], axis=1, inplace=True)
+        self.df.drop(self.df.columns[8:15], axis=1, inplace=True)
+        self.df.drop(self.df.columns[[0, 1, 3, 5, 6]], axis=1, inplace=True)
         # 处理经纬度数据,(将度分转换为度)
-        df[2] = (df[2]//100) + (df[2]%100)/60
-        df[4] = (df[4]//100) + (df[4]%100)/60
+        self.df[2] = (self.df[2] // 100) + (self.df[2] % 100) / 60
+        self.df[4] = (self.df[4] // 100) + (self.df[4] % 100) / 60
 
         msg = ("将数据写入到data.csv文件, 该过程时间较长, 请耐心等待...")
         self.signal_write_msg.emit(msg)  # 发送日志消息
         start = time.perf_counter()
-        df.to_csv("data.csv", float_format='%.10f')
+        self.df.to_csv("data.csv", float_format='%.10f')
         elapsed = time.perf_counter() - start
         msg = ("操作完成, 用时: {}秒".format(elapsed))
         self.signal_write_msg.emit(msg)
@@ -180,7 +211,7 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
                                      'align': 'center',
                                      'valign': 'vcenter'})
 
-        df.to_excel(excel_writer=writer, sheet_name='gpgga_data', columns=[2, 4, 7], index=False, header=True)
+        self.df.to_excel(excel_writer=writer, sheet_name='gpgga_data', columns=[2, 4, 7], index=False, header=True)
         worksheet1 = writer.sheets['gpgga_data']
         # 向excel中写入数据，建立图标时要用到
         headings = ['纬度值', '经度值', '卫星数']
@@ -191,36 +222,16 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
         worksheet1.set_column('C:C', 10, C_fmt)
         # 将写入的内容进行保存
         writer.save()
-
         elapsed = time.perf_counter() - start
         msg = ("操作完成, 用时: {}秒".format(elapsed))
         self.signal_write_msg.emit(msg)
+        msg = ("已经生成Excel文件,请到文件目录查看!\r".format(elapsed))
+        self.signal_write_msg.emit(msg)
 
-
-        x = df[2]
-        y = df[4]
-        z = df[7]
-        # 生成折线图并保存
-        plt_plot_table(x, y, "blue")
-        msg = ("正在绘制经纬度点线图, 请稍后...")
-        self.signal_write_msg.emit(msg)  # 发送日志消息
-        plt_plot_table_2(24, z, "red")
-        msg = ("正在绘制搜星数点线图, 请稍后...")
-        self.signal_write_msg.emit(msg)  # 发送日志消息
-        msg = ("已生成图表并保存,请到文件目录查看!")
-        self.signal_write_msg.emit(msg)  # 发送日志消息
-
-
-    # 生成图标按键指令
-    def btn_creat_plt_func(self):
-        t = threading.Thread(target=self.thread_plt_func)
-        t.setDaemon(True)# 守护, 主线程结束, 子线程就结束, 不等待
-        t.start()# 启动
-        pass
-
-    # 读取TXT信息, 转存到Excel中
-    def translate_to_excel_func(self):
-
+        try:
+            stop_threading.stop_thread(self.t_creat_excel)
+        except Exception:
+            pass
         pass
 
     # 合并所有TXT文件到一个文件中
@@ -241,16 +252,16 @@ class MainLogic(QMainWindow, MainForm.Ui_MainWindow , signal_emit.SignalEmit):
                 self.signal_write_msg.emit(msg)  # 发送日志消息
                 with open(source_file, 'r') as file_s:
                     file_t.write(file_s.read())
-        msg = ("\r=== 启动生成data.xlsx文件流程 ===")
-        self.signal_write_msg.emit(msg)  # 发送日志消息
-        pass
 
     # 创建Excel文件 按钮操作事件
     def btn_creat_excel_func(self):
         if len(self.txt_files_name) == 0: # 如果没有选择文件路径
             self.txt_files_path, self.txt_files_name = self.list_current_path_all_files(".txt")
         self.commit_all_txt_func() # 合并txt文件
-        self.translate_to_excel_func() # 转换为Excel
+        # 转换为Excel
+        self.t_creat_excel = threading.Thread(target=self.translate_to_excel_func)
+        self.t_creat_excel.setDaemon(True)  # 守护, 主线程结束, 子线程就结束, 不等待
+        self.t_creat_excel.start()  # 启动
         pass
 
     # 打开数据所在文件夹

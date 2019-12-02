@@ -58,7 +58,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. 用串口助手采集GPS模块返回的GPGGA数据,默认以文本格式保存,可以分包保存&lt;/p&gt;&lt;p&gt;2. 选择数据文件所在文件夹,软件会自动对文件进行合并&lt;/p&gt;&lt;p&gt;3. 生成Excel文件,该文件为原始数据&lt;/p&gt;&lt;p&gt;4. 生成图表,默认使用散点图&lt;/p&gt;&lt;p&gt;5. 由于数据量大,执行过程较慢,请耐心等待&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;1. 用串口助手采集GPS模块返回的GPGGA数据,默认以文本格式保存,可以分包保存&lt;/p&gt;&lt;p&gt;2. 选择数据文件所在文件夹,软件会自动对文件进行合并&lt;/p&gt;&lt;p&gt;3. 生成的data.txt文件,该文件为原始数据,未经过处理&lt;/p&gt;&lt;p&gt;4. 生成的data.csv和data.xlsx文件为处理过的文件,将度分格式转为度格式&lt;/p&gt;&lt;p&gt;5. 生成图表,默认使用散点图,由于数据量大,执行过程较慢,请耐心等待&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
