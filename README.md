@@ -9,6 +9,8 @@
 
 3. 使用说明请下载 <<驾校基站稳定性测试工具使用说明.docx>>
 
+4. 可执行文件在 ..excel_pandas_matplotlib/main_winform/dist/main.exe
+
 
 
 ----
